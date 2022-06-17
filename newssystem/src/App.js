@@ -9,9 +9,7 @@ function App(props) {
 
     return (
         <AuthProvider>
-            <div>
-                {element}
-            </div>
+            {element}
         </AuthProvider>
     );
 }
