@@ -1,6 +1,8 @@
 import React from 'react';
 import {useAuth} from "../../guard/AuthProvider";
-import {Navigate} from "react-router-dom";
+import {Navigate, Outlet} from "react-router-dom";
+import SideMenu from "../../components/SideMenu";
+import TopHeader from "../../components/TopHeader";
 
 function NewsSendBoxLayout(props) {
     const {user} = useAuth()
@@ -11,7 +13,9 @@ function NewsSendBoxLayout(props) {
 
     return (
         <div>
-            NewsSendBox
+            <SideMenu/>
+            <TopHeader/>
+            <Outlet/>
         </div>
     );
 }
