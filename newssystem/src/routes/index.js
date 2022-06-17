@@ -1,6 +1,5 @@
 import Login from "../pages/Login";
-import NewsSendBox from "../pages/SandBox";
-import {Navigate} from "react-router-dom";
+import NewsSendBoxLayout from "../pages/SandBoxLayout";
 
 const routes = [
     {
@@ -8,8 +7,8 @@ const routes = [
         element: <Login/>
     },
     {
-        path: '/',
-        element: <NewsSendBox/>
+        path: '/index',
+        element: <NewsSendBoxLayout/>
     }
 ]
 
