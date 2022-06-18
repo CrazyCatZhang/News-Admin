@@ -6,32 +6,55 @@ import {
     UserOutlined,
     VideoCameraOutlined,
 } from '@ant-design/icons';
+import './index.css'
 
 function SideMenu(props) {
+
+    const items = [
+        {
+            key: "/home",
+            label: "首页",
+            icon: <UserOutlined/>
+        },
+        {
+            key: "/user-manage",
+            label: "用户管理",
+            icon: <UserOutlined/>,
+            children: [
+                {
+                    key: "/user-manage/list",
+                    label: "用户列表",
+                    icon: <UserOutlined/>
+                }
+            ]
+        },
+        {
+            key: "/right-manage",
+            label: "权限管理",
+            icon: <UserOutlined/>,
+            children: [
+                {
+                    key: "/right-manage/role/list",
+                    label: "角色列表",
+                    icon: <UserOutlined/>
+                },
+                {
+                    key: "/right-manage/right/list",
+                    label: "权限列表",
+                    icon: <UserOutlined/>
+                }
+            ]
+        }
+    ]
+
     return (
-        <Sider trigger={null} collapsible>
-            <div className="logo"/>
+        <Sider trigger={null} collapsible collapsed={false}>
+            <div className="logo">全球新闻发布管理系统</div>
             <Menu
                 theme="dark"
                 mode="inline"
                 defaultSelectedKeys={['1']}
-                items={[
-                    {
-                        key: '1',
-                        icon: <UserOutlined/>,
-                        label: 'nav 1',
-                    },
-                    {
-                        key: '2',
-                        icon: <VideoCameraOutlined/>,
-                        label: 'nav 2',
-                    },
-                    {
-                        key: '3',
-                        icon: <UploadOutlined/>,
-                        label: 'nav 3',
-                    },
-                ]}
+                items={items}
             />
         </Sider>
     );
