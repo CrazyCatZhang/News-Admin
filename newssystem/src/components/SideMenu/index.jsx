@@ -7,14 +7,16 @@ import {
     VideoCameraOutlined,
 } from '@ant-design/icons';
 import './index.css'
+import {useNavigate} from "react-router-dom";
 
 function SideMenu(props) {
+    const navigate = useNavigate()
 
     const items = [
         {
             key: "/home",
             label: "首页",
-            icon: <UserOutlined/>
+            icon: <UserOutlined/>,
         },
         {
             key: "/user-manage",
@@ -55,6 +57,9 @@ function SideMenu(props) {
                 mode="inline"
                 defaultSelectedKeys={['1']}
                 items={items}
+                onClick={(e) => {
+                    navigate(e.key)
+                }}
             />
         </Sider>
     );
