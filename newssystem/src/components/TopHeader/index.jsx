@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {Header} from "antd/es/layout/layout";
-import {DownOutlined, MenuFoldOutlined, MenuUnfoldOutlined} from "@ant-design/icons";
-import {Avatar, Dropdown, Image, Menu, Space} from "antd";
+import {MenuFoldOutlined, MenuUnfoldOutlined} from "@ant-design/icons";
+import {Avatar, Dropdown, Menu} from "antd";
 
 function TopHeader(props) {
     const menu = (
@@ -34,7 +34,7 @@ function TopHeader(props) {
             <div style={{float: 'right'}}>
                 <span>欢迎admin回来</span>
                 <Dropdown overlay={menu}>
-                    <Avatar src="https://joeschmoe.io/api/v1/random" />
+                    <Avatar src="https://joeschmoe.io/api/v1/random"/>
                 </Dropdown>
             </div>
         </Header>
