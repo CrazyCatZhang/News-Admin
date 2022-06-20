@@ -1,16 +1,20 @@
-import React, {forwardRef, useState} from 'react';
+import React, {forwardRef, useEffect, useState} from 'react';
 import {Form, Input, Select} from "antd";
 
 const {Option} = Select
 
-const UserForm = forwardRef((props, addForm) => {
+const UserForm = forwardRef((props, ref) => {
 
     const {regionList, roleList} = props
     const [isDisabled, setIsDisabled] = useState(false)
 
+    useEffect(() => {
+        setIsDisabled(props.isUpdateDisabled)
+    }, [props.isUpdateDisabled])
+
     return (
         <Form
-            ref={addForm}
+            ref={ref}
             layout="vertical"
         >
             <Form.Item
@@ -48,7 +52,7 @@ const UserForm = forwardRef((props, addForm) => {
                 <Select onChange={(value) => {
                     if (value === 1) {
                         setIsDisabled(true)
-                        addForm.current.setFieldsValue({
+                        ref.current.setFieldsValue({
                             region: ''
                         })
                     } else {

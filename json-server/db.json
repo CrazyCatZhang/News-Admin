@@ -73,15 +73,6 @@
       "id": 8
     },
     {
-      "username": "CatZhang",
-      "password": "123",
-      "region": "北美洲",
-      "roleId": 2,
-      "roleState": true,
-      "default": false,
-      "id": 9
-    },
-    {
       "username": "Cat",
       "password": "123",
       "region": "",
