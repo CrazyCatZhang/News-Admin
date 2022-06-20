@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import axios from "axios";
-import {Button, Table, Tag, Modal} from "antd";
+import {Button, Table, Tag, Modal, Popover, Switch} from "antd";
 import {DeleteOutlined, EditOutlined, ExclamationCircleOutlined} from "@ant-design/icons";
 
 const {confirm} = Modal
@@ -47,6 +47,21 @@ function RightList(props) {
         });
     }
 
+    const switchMethod = (item) => {
+        item.pagepermisson = item.pagepermisson === 1 ? 0 : 1
+        setDataSource([...dataSource])
+
+        if (item.grade === 1) {
+            axios.patch(`http://localhost:5001/rights/${item.id}`, {
+                pagepermisson: item.pagepermisson
+            })
+        } else {
+            axios.patch(`http://localhost:5001/children/${item.id}`, {
+                pagepermisson: item.pagepermisson
+            })
+        }
+    }
+
     const columns = [
         {
             title: 'ID',
@@ -71,7 +86,13 @@ function RightList(props) {
             render: (item) => {
                 return <div>
                     <Button danger shape="circle" icon={<DeleteOutlined/>} onClick={() => confirmMethod(item)}/>
-                    <Button type="primary" shape="circle" icon={<EditOutlined/>}/>
+                    <Popover content={<div style={{textAlign: 'center'}}><Switch checked={item.pagepermisson}
+                                                                                 onChange={() => switchMethod(item)}></Switch>
+                    </div>} title="配置项"
+                             trigger={item.pagepermisson === undefined ? '' : 'click'}>
+                        <Button type="primary" shape="circle" icon={<EditOutlined/>}
+                                disabled={item.pagepermisson === undefined}/>
+                    </Popover>
                 </div>
             }
         }
