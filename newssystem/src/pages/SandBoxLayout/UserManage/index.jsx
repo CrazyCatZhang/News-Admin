@@ -82,7 +82,8 @@ function UserList(props) {
     }
     //删除
     const deleteMethod = (item) => {
-
+        setDataSource(dataSource.filter(data => data.id !== item.id))
+        axios.delete(`http://localhost:5001/users/${item.id}`)
     }
 
     const addFormOK = () => {

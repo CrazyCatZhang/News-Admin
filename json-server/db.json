@@ -89,15 +89,6 @@
       "roleState": true,
       "default": true,
       "id": 10
-    },
-    {
-      "username": "Crazy",
-      "password": "123",
-      "region": "欧洲",
-      "roleId": 3,
-      "roleState": true,
-      "default": false,
-      "id": 11
     }
   ],
   "roles": [
