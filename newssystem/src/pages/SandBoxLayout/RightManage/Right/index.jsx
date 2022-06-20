@@ -1,7 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import axios from "axios";
-import {Button, Table, Tag} from "antd";
-import {DeleteOutlined, EditOutlined} from "@ant-design/icons";
+import {Button, Table, Tag, Modal} from "antd";
+import {DeleteOutlined, EditOutlined, ExclamationCircleOutlined} from "@ant-design/icons";
+
+const {confirm} = Modal
 
 function RightList(props) {
     const [dataSource, setDataSource] = useState([])
@@ -9,10 +11,41 @@ function RightList(props) {
     useEffect(() => {
         axios.get("http://localhost:5001/rights?_embed=children").then(res => {
             let list = res.data
-            list[0].children = null
+            list.forEach(item => {
+                if (item.children?.length === 0) {
+                    item.children = ''
+                }
+            })
             setDataSource(list)
         })
     }, [])
+
+    const deleteMethod = async (item) => {
+        if (item.grade === 1) {
+            setDataSource(dataSource.filter(data => data.id !== item.id))
+            await axios.delete(`http://localhost:5001/rights/${item.id}`)
+        } else {
+            let list = dataSource.filter(data => data.id === item.rightId)
+            list[0].children = list[0].children.filter(data => data.id !== item.id)
+            setDataSource([...dataSource])
+            await axios.delete(`http://localhost:5001/children/${item.id}`)
+        }
+
+    }
+
+    const confirmMethod = (item) => {
+        confirm({
+            title: 'Do you Want to delete these items?',
+            icon: <ExclamationCircleOutlined/>,
+            content: 'Some descriptions',
+            onOk() {
+                deleteMethod(item)
+            },
+            onCancel() {
+                console.log('Cancel');
+            },
+        });
+    }
 
     const columns = [
         {
@@ -35,9 +68,9 @@ function RightList(props) {
         },
         {
             title: "操作",
-            render: () => {
+            render: (item) => {
                 return <div>
-                    <Button danger shape="circle" icon={<DeleteOutlined/>}/>
+                    <Button danger shape="circle" icon={<DeleteOutlined/>} onClick={() => confirmMethod(item)}/>
                     <Button type="primary" shape="circle" icon={<EditOutlined/>}/>
                 </div>
             }
