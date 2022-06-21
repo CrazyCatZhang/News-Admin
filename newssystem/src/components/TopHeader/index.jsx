@@ -6,14 +6,14 @@ import {useAuth} from "../../guard/AuthProvider";
 
 function TopHeader(props) {
 
-    const {logout} = useAuth()
+    const {user: {role: {roleName}, username}, logout} = useAuth()
 
     const menu = (
         <Menu
             items={[
                 {
                     key: '1',
-                    label: '超级管理员'
+                    label: roleName
                 },
                 {
                     key: '2',
@@ -39,7 +39,13 @@ function TopHeader(props) {
                 onClick: () => setCollapsed(!collapsed),
             })}
             <div style={{float: 'right'}}>
-                <span>欢迎admin回来</span>
+                <span>
+                    欢迎
+                    <span style={{color: '#1890ff'}}>
+                    {username}
+                    </span>
+                    回来
+                </span>
                 <Dropdown overlay={menu}>
                     <Avatar src="https://joeschmoe.io/api/v1/random"/>
                 </Dropdown>

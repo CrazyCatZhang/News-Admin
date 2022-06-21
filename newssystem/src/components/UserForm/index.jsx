@@ -1,16 +1,43 @@
 import React, {forwardRef, useEffect, useState} from 'react';
 import {Form, Input, Select} from "antd";
+import {useAuth} from "../../guard/AuthProvider";
 
 const {Option} = Select
 
 const UserForm = forwardRef((props, ref) => {
 
-    const {regionList, roleList} = props
+    const {regionList, roleList, isUpdate, isUpdateDisabled} = props
     const [isDisabled, setIsDisabled] = useState(false)
 
+    const {user: {roleId, region}} = useAuth()
+
     useEffect(() => {
-        setIsDisabled(props.isUpdateDisabled)
-    }, [props.isUpdateDisabled])
+        setIsDisabled(isUpdateDisabled)
+    }, [isUpdateDisabled])
+
+    const changeRegionDisabled = (value) => {
+        if (isUpdate) {
+            return roleId !== 1;
+        } else {
+            if (roleId === 1) {
+                return false
+            } else {
+                return value !== region
+            }
+        }
+    }
+
+    const changeRoleDisabled = (item) => {
+        if (isUpdate) {
+            return roleId !== 1;
+        } else {
+            if (roleId === 1) {
+                return false
+            } else {
+                return item.id !== 3
+            }
+        }
+    }
 
     return (
         <Form
@@ -39,7 +66,8 @@ const UserForm = forwardRef((props, ref) => {
                 <Select disabled={isDisabled}>
                     {
                         regionList.map(item =>
-                            <Option value={item.value} key={item.id}>{item.title}</Option>
+                            <Option value={item.value} key={item.id}
+                                    disabled={changeRegionDisabled(item.value)}>{item.title}</Option>
                         )
                     }
                 </Select>
@@ -61,7 +89,8 @@ const UserForm = forwardRef((props, ref) => {
                 }}>
                     {
                         roleList.map(item =>
-                            <Option value={item.id} key={item.id}>{item.roleName}</Option>
+                            <Option value={item.id} key={item.id}
+                                    disabled={changeRoleDisabled(item)}>{item.roleName}</Option>
                         )
                     }
                 </Select>

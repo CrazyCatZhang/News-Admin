@@ -3,6 +3,7 @@ import axios from "axios";
 import {Button, Switch, Table, Modal} from "antd";
 import {DeleteOutlined, EditOutlined, ExclamationCircleOutlined} from "@ant-design/icons";
 import UserForm from "../../../components/UserForm";
+import {useAuth} from "../../../guard/AuthProvider";
 
 const {confirm} = Modal
 
@@ -15,14 +16,18 @@ function UserList(props) {
     const [isUpdateDisabled, setIsUpdateDisabled] = useState(false)
     const [current, setCurrent] = useState(null)
 
+    const {user: {username, roleId, region}} = useAuth()
+
     const addForm = useRef()
     const updateForm = useRef()
 
     useEffect(() => {
         axios.get("http://localhost:5001/users?_expand=role").then(res => {
             const list = res.data
-            console.log(list)
-            setDataSource(list)
+            setDataSource(roleId === 1 ? list : [
+                ...list.filter(item => item.username === username),
+                ...list.filter(item => item.region === region && item.roleId === 3)
+            ])
         })
         axios.get("http://localhost:5001/regions").then(res => {
             const list = res.data
@@ -32,7 +37,7 @@ function UserList(props) {
             const list = res.data
             setRoleList(list)
         })
-    }, [])
+    }, [roleId, region, username])
 
     const columns = [
         {
@@ -200,7 +205,7 @@ function UserList(props) {
                 }}
             >
                 <UserForm regionList={regionList} roleList={roleList} ref={updateForm}
-                          isUpdateDisabled={isUpdateDisabled}/>
+                          isUpdateDisabled={isUpdateDisabled} isUpdate={true}/>
             </Modal>
         </div>
     )

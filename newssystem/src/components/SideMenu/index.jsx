@@ -7,12 +7,15 @@ import {
 import './index.css'
 import {useLocation, useNavigate} from "react-router-dom";
 import axios from "axios";
+import {useAuth} from "../../guard/AuthProvider";
 
 function SideMenu(props) {
 
     const rootSubmenuKeys = ['/user-manage', '/right-manage', '/news-manage', '/audit-manage', '/publish-manage']
     const defaultSelectedKeys = [useLocation().pathname]
     const defaultOpenKeys = ["/" + useLocation().pathname.split('/')[1]]
+    const {user: {role: {rights}}} = useAuth()
+
 
     const [items, setItems] = useState([])
     const [openKeys, setOpenKeys] = useState(defaultOpenKeys)
@@ -31,8 +34,8 @@ function SideMenu(props) {
 
 
     function checkPagePermissions(items) {
-        return items.filter(item => item.pagepermisson === 1).map(item => {
-            item.children = item.children.filter(arr => arr.pagepermisson === 1).map(arr => {
+        return items.filter(item => item.pagepermisson === 1 && rights.includes(item.key)).map(item => {
+            item.children = item.children.filter(arr => arr.pagepermisson === 1 && rights.includes(arr.key)).map(arr => {
                 return {key: arr.key, label: arr.label}
             })
             if (item.children.length > 0) {
@@ -55,7 +58,7 @@ function SideMenu(props) {
         axios.get('http://localhost:5001/rights?_embed=children').then(res => {
             setItems(checkPagePermissions(res.data))
         })
-    }, [])
+    }, [checkPagePermissions])
 
     return (
         <Sider trigger={null} collapsible collapsed={false}>
