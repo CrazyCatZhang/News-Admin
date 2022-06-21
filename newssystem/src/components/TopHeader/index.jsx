@@ -2,8 +2,12 @@ import React, {useState} from 'react';
 import {Header} from "antd/es/layout/layout";
 import {MenuFoldOutlined, MenuUnfoldOutlined} from "@ant-design/icons";
 import {Avatar, Dropdown, Menu} from "antd";
+import {useAuth} from "../../guard/AuthProvider";
 
 function TopHeader(props) {
+
+    const {logout} = useAuth()
+
     const menu = (
         <Menu
             items={[
@@ -15,6 +19,9 @@ function TopHeader(props) {
                     key: '2',
                     danger: true,
                     label: 'Logout',
+                    onClick: () => {
+                        logout()
+                    }
                 },
             ]}
         />

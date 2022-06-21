@@ -5,9 +5,9 @@ export const useLocalStorage = (keyName, defaultValue) => {
         try {
             const value = window.localStorage.getItem(keyName);
             if (value) {
-                return value
+                return JSON.parse(value)
             } else {
-                window.localStorage.setItem(keyName, defaultValue)
+                window.localStorage.setItem(keyName, JSON.stringify(defaultValue))
                 return defaultValue
             }
         } catch (e) {
@@ -16,7 +16,7 @@ export const useLocalStorage = (keyName, defaultValue) => {
     })
     const setValue = (value) => {
         try {
-            window.localStorage.setItem(keyName, value)
+            window.localStorage.setItem(keyName, JSON.stringify(value))
         } catch (e) {
 
         }
