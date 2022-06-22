@@ -1,16 +1,37 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import './App.css'
-import {useRoutes} from "react-router-dom";
+import {Navigate, useRoutes} from "react-router-dom";
 import routes from "./routes";
-import {AuthProvider} from "./guard/AuthProvider";
+import {useAuth} from "./guard/AuthProvider";
+import Login from "./pages/Login";
 
 function App(props) {
-    const element = useRoutes(routes)
+
+    const {user} = useAuth()
+
+    let elementRoutes = null
+
+    if (user) {
+        elementRoutes = routes[user.roleId - 1]
+    } else {
+        elementRoutes = [
+            {
+                path: '/login',
+                element: <Login/>
+            },
+            {
+                path: '/',
+                element: <Navigate to="/login"/>
+            },
+        ]
+    }
+
+    const element = useRoutes(elementRoutes)
 
     return (
-        <AuthProvider>
+        <>
             {element}
-        </AuthProvider>
+        </>
     );
 }
 
