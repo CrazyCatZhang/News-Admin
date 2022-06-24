@@ -1,10 +1,12 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {useAuth} from "../../guard/AuthProvider";
 import {Navigate, Outlet} from "react-router-dom";
 import SideMenu from "../../components/SideMenu";
 import TopHeader from "../../components/TopHeader";
 import {Layout} from "antd";
 import {Content} from "antd/es/layout/layout";
+
+import 'accessible-nprogress/dist/accessible-nprogress.min.css'
 import './index.css'
 
 function NewsSendBoxLayout(props) {

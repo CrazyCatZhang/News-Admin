@@ -7,6 +7,7 @@
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.3.0",
     "@testing-library/user-event": "^13.5.0",
+    "accessible-nprogress": "^2.1.2",
     "antd": "^4.21.3",
     "axios": "^0.27.2",
     "http-proxy-middleware": "^2.0.6",

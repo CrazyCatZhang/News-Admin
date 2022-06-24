@@ -58,7 +58,7 @@ function SideMenu(props) {
         axios.get('http://localhost:5001/rights?_embed=children').then(res => {
             setItems(checkPagePermissions(res.data))
         })
-    }, [checkPagePermissions])
+    }, [])
 
     return (
         <Sider trigger={null} collapsible collapsed={false}>
