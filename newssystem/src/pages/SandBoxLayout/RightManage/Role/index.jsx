@@ -62,10 +62,10 @@ function RoleList(props) {
     }
 
     useEffect(() => {
-        axios.get('http://localhost:5001/roles').then(res => {
+        axios.get('/roles').then(res => {
             setDataSource(res.data)
         })
-        axios.get('http://localhost:5001/rights?_embed=children').then(res => {
+        axios.get('/rights?_embed=children').then(res => {
             let results = res.data.map(item => {
                 if (item.children?.length > 0) {
                     item.children.forEach(child => {
@@ -90,7 +90,7 @@ function RoleList(props) {
             }
             return item
         }))
-        axios.patch(`http://localhost:5001/roles/${currentID}`, {
+        axios.patch(`/roles/${currentID}`, {
             rights: currentRightList
         })
     }

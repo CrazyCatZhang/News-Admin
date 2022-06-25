@@ -55,7 +55,7 @@ function SideMenu(props) {
     }
 
     useEffect(() => {
-        axios.get('http://localhost:5001/rights?_embed=children').then(res => {
+        axios.get('/rights?_embed=children').then(res => {
             setItems(checkPagePermissions(res.data))
         })
     }, [])

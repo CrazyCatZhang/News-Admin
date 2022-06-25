@@ -22,18 +22,18 @@ function UserList(props) {
     const updateForm = useRef()
 
     useEffect(() => {
-        axios.get("http://localhost:5001/users?_expand=role").then(res => {
+        axios.get("/users?_expand=role").then(res => {
             const list = res.data
             setDataSource(roleId === 1 ? list : [
                 ...list.filter(item => item.username === username),
                 ...list.filter(item => item.region === region && item.roleId === 3)
             ])
         })
-        axios.get("http://localhost:5001/regions").then(res => {
+        axios.get("/regions").then(res => {
             const list = res.data
             setRegionList(list)
         })
-        axios.get("http://localhost:5001/roles").then(res => {
+        axios.get("/roles").then(res => {
             const list = res.data
             setRoleList(list)
         })
@@ -109,7 +109,7 @@ function UserList(props) {
     const handleChange = (item) => {
         item.roleState = !item.roleState
         setDataSource([...dataSource])
-        axios.patch(`http://localhost:5001/users/${item.id}`, {
+        axios.patch(`/users/${item.id}`, {
             roleState: item.roleState
         })
     }
@@ -129,7 +129,7 @@ function UserList(props) {
     //删除
     const deleteMethod = (item) => {
         setDataSource(dataSource.filter(data => data.id !== item.id))
-        axios.delete(`http://localhost:5001/users/${item.id}`)
+        axios.delete(`/users/${item.id}`)
     }
 
     const addFormOK = () => {
@@ -139,7 +139,7 @@ function UserList(props) {
             const defaultValue = value.roleId === 1
             const data = {...value, "roleState": true, "default": defaultValue}
 
-            axios.post('http://localhost:5001/users', data).then((res) => {
+            axios.post('/users', data).then((res) => {
                 setDataSource([...dataSource, {
                     ...res.data,
                     role: roleList.filter(item => item.id === res.data.roleId)[0]
@@ -163,7 +163,7 @@ function UserList(props) {
                 }
                 return item
             }))
-            axios.patch(`http://localhost:5001/users/${current.id}`, value)
+            axios.patch(`/users/${current.id}`, value)
         })
     }
 

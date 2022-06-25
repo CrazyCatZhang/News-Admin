@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react';
-import './App.css'
 import {Navigate, useRoutes} from "react-router-dom";
 import routes from "./routes";
 import {useAuth} from "./guard/AuthProvider";
@@ -19,6 +18,9 @@ import Sunset from "./pages/SandBoxLayout/PublishManage/Sunset";
 import axios from "axios";
 import NewsSendBoxLayout from "./pages/SandBoxLayout";
 import NoPermission from "./pages/SandBoxLayout/NoPermission";
+
+import './App.css'
+import './utils/http'
 
 function App(props) {
 
@@ -91,8 +93,8 @@ function App(props) {
     useEffect(() => {
         console.log('useEffect')
         Promise.all([
-            axios.get("http://localhost:5001/rights"),
-            axios.get("http://localhost:5001/children"),
+            axios.get("/rights"),
+            axios.get("/children"),
         ]).then(res => {
             setBackRoute([...res[0].data, ...res[1].data])
         })
