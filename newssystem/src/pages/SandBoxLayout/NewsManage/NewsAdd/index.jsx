@@ -96,7 +96,9 @@ function NewsAdd(props) {
         },
         {
             title: '新闻内容',
-            content: <NewsEditor/>,
+            content: <NewsEditor getContent={(value) => {
+                console.log(value)
+            }}/>,
             description: '新闻主题内容'
         },
         {

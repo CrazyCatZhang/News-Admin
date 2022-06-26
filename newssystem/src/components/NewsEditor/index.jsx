@@ -1,19 +1,43 @@
-import React, {useState} from 'react';
-import {Editor} from "react-draft-wysiwyg";
-import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+import React, {useEffect, useState} from 'react';
+import {Editor, Toolbar} from '@wangeditor/editor-for-react'
+import '@wangeditor/editor/dist/css/style.css' // 引入 css
 
 function NewsEditor(props) {
 
-    const [editorState,setEditorState] = useState('')
+    const [editor, setEditor] = useState(null) // 存储 editor 实例
+    const [html, setHtml] = useState('') // 编辑器内容
+
+    const toolbarConfig = {}
+    const editorConfig = {
+        placeholder: '请输入内容...',
+        onBlur: (editor) => {
+            props.getContent(editor.getHtml())
+        }
+    }
+
+    useEffect(() => {
+        return () => {
+            if (editor == null) return
+            editor.destroy()
+            setEditor(null)
+        }
+    }, [editor])
 
     return (
-        <div>
+        <div style={{border: '1px solid #ccc', zIndex: 100}}>
+            <Toolbar
+                editor={editor}
+                defaultConfig={toolbarConfig}
+                mode="default"
+                style={{borderBottom: '1px solid #ccc'}}
+            />
             <Editor
-                editorState={editorState}
-                toolbarClassName="toolbarClassName"
-                wrapperClassName="wrapperClassName"
-                editorClassName="editorClassName"
-                onEditorStateChange={(editorState) => setEditorState(editorState)}
+                defaultConfig={editorConfig}
+                value={html}
+                onCreated={setEditor}
+                onChange={editor => setHtml(editor.getHtml())}
+                mode="default"
+                style={{height: '500px', overflowY: 'hidden'}}
             />
         </div>
     );
