@@ -16,7 +16,6 @@ function SideMenu(props) {
     const defaultOpenKeys = ["/" + useLocation().pathname.split('/')[1]]
     const {user: {role: {rights}}} = useAuth()
 
-
     const [items, setItems] = useState([])
     const [openKeys, setOpenKeys] = useState(defaultOpenKeys)
 

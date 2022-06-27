@@ -1,8 +1,12 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {Button, PageHeader, Steps, message, Form, Input, Select} from "antd";
-import './index.css'
+import {Button, PageHeader, Steps, message, Form, Input, Select, notification} from "antd";
 import axios from "axios";
+
+import './index.css'
+
 import NewsEditor from "../../../../components/NewsEditor";
+import {useAuth} from "../../../../guard/AuthProvider";
+import {useLocation, useNavigate} from "react-router-dom";
 
 const {Step} = Steps;
 const {Option} = Select;
@@ -11,8 +15,12 @@ function NewsAdd(props) {
 
     const [current, setCurrent] = useState(0);
     const [category, setCategory] = useState([])
+    const [formInfo, setFormInfo] = useState({})
+    const [content, setContent] = useState("")
 
     const NewsRef = useRef()
+    const {user} = useAuth()
+    const navigate = useNavigate()
 
     useEffect(() => {
         axios.get('/categories').then(res => {
@@ -24,12 +32,18 @@ function NewsAdd(props) {
         if (current === 0) {
             NewsRef.current.validateFields().then(res => {
                 console.log(res)
+                setFormInfo(res)
                 setCurrent(current + 1);
             }).catch(err => {
                 console.log(err)
             })
         } else {
-            setCurrent(current + 1);
+            const pattern = /<p>(&nbsp;)*<\/p>/
+            if (content === '' || pattern.test(content) || content === '<p><br></p>') {
+                message.error('新闻内容不能为空')
+            } else {
+                setCurrent(current + 1);
+            }
         }
     };
 
@@ -44,6 +58,33 @@ function NewsAdd(props) {
     const onSearch = () => {
 
     }
+
+    const handleSave = (auditState) => {
+        axios.post('/news', {
+            ...formInfo,
+            "content": content,
+            "region": user.region ? user.region : "全球",
+            "author": user.username,
+            "roleId": user.roleId,
+            "auditState": auditState,
+            "publishState": 0,
+            "createTime": Date.now(),
+            "star": 0,
+            "view": 0,
+        }).then(res => {
+            navigate(auditState === 0 ? '/news-manage/draft' : '/audit-manage/list')
+            openNotification('bottomRight',auditState)
+        })
+    }
+
+    const openNotification = (placement,auditState) => {
+        notification.info({
+            message: `通知`,
+            description:
+                `您可以到${auditState === 0 ? '草稿箱' : '审核列表'}中查看您的新闻`,
+            placement,
+        });
+    };
 
     const steps = [
         {
@@ -98,6 +139,7 @@ function NewsAdd(props) {
             title: '新闻内容',
             content: <NewsEditor getContent={(value) => {
                 console.log(value)
+                setContent(value)
             }}/>,
             description: '新闻主题内容'
         },
@@ -122,7 +164,11 @@ function NewsAdd(props) {
                     steps.map(step => <Step key={step.title} title={step.title} description={step.description}/>)
                 }
             </Steps>
-            <div className="steps-content">{steps[current].content}</div>
+            <div>
+                <div className={current === 0 ? 'steps-content' : 'active'}>{steps[0].content}</div>
+                <div className={current === 1 ? 'steps-content' : 'active'}>{steps[1].content}</div>
+                <div className={current === 2 ? 'steps-content' : 'active'}>{steps[2].content}</div>
+            </div>
             <div className="steps-action" style={{marginTop: "50px"}}>
                 {current > 0 && (
                     <Button
@@ -131,18 +177,19 @@ function NewsAdd(props) {
                         }}
                         onClick={() => prev()}
                     >
-                        Previous
+                        上一步
                     </Button>
                 )}
                 {current < steps.length - 1 && (
                     <Button type="primary" onClick={() => next()}>
-                        Next
+                        下一步
                     </Button>
                 )}
                 {current === steps.length - 1 && (
-                    <Button type="primary" onClick={() => message.success('Processing complete!')}>
-                        Done
-                    </Button>
+                    <>
+                        <Button type="primary" onClick={() => handleSave(0)}>保存草稿箱</Button>
+                        <Button danger onClick={() => handleSave(1)}>提交审核</Button>
+                    </>
                 )}
             </div>
         </>

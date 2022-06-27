@@ -10,9 +10,6 @@ function NewsEditor(props) {
     const toolbarConfig = {}
     const editorConfig = {
         placeholder: '请输入内容...',
-        onBlur: (editor) => {
-            props.getContent(editor.getHtml())
-        }
     }
 
     useEffect(() => {
@@ -24,7 +21,9 @@ function NewsEditor(props) {
     }, [editor])
 
     return (
-        <div style={{border: '1px solid #ccc', zIndex: 100}}>
+        <div style={{border: '1px solid #ccc', zIndex: 100}} onBlur={() => {
+            props.getContent(html)
+        }}>
             <Toolbar
                 editor={editor}
                 defaultConfig={toolbarConfig}
