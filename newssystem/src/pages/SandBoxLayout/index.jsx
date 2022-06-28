@@ -8,6 +8,7 @@ import {Content} from "antd/es/layout/layout";
 
 import 'accessible-nprogress/dist/accessible-nprogress.min.css'
 import './index.css'
+import NewsRouter from "../../components/NewsRouter";
 
 function NewsSendBoxLayout(props) {
     const {user} = useAuth()
@@ -30,7 +31,7 @@ function NewsSendBoxLayout(props) {
                         overflow: "auto",
                     }}
                 >
-                    <Outlet/>
+                    <NewsRouter/>
                 </Content>
             </Layout>
         </Layout>
