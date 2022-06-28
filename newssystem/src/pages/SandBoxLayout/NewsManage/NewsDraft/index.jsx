@@ -3,6 +3,7 @@ import axios from "axios";
 import {Button, Table, Modal} from "antd";
 import {DeleteOutlined, EditOutlined, ExclamationCircleOutlined, UploadOutlined} from "@ant-design/icons";
 import {useAuth} from "../../../../guard/AuthProvider";
+import {Link} from "react-router-dom";
 
 const {confirm} = Modal
 
@@ -28,7 +29,10 @@ function NewsDraft(props) {
         },
         {
             title: '新闻标题',
-            dataIndex: 'title'
+            dataIndex: 'title',
+            render: (title, item) => {
+                return <Link to={`/news-manage/preview/${item.id}`}>{title}</Link>
+            }
         },
         {
             title: '作者',
