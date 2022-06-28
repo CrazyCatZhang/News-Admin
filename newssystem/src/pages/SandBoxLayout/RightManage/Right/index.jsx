@@ -72,7 +72,7 @@ function RightList(props) {
         },
         {
             title: '权限名称',
-            dataIndex: 'label'
+            dataIndex: 'title'
         },
         {
             title: "权限路径",

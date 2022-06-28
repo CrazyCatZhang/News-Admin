@@ -66,16 +66,7 @@ function RoleList(props) {
             setDataSource(res.data)
         })
         axios.get('/rights?_embed=children').then(res => {
-            let results = res.data.map(item => {
-                if (item.children?.length > 0) {
-                    item.children.forEach(child => {
-                        child.title = child.label
-                    })
-                }
-                item.title = item.label
-                return item
-            })
-            setRightList(results)
+            setRightList(res.data)
         })
     }, [])
 

@@ -45,7 +45,7 @@ function UserList(props) {
             dataIndex: 'region',
             filters: [
                 ...regionList.map(item => ({
-                    text: item.label,
+                    text: item.title,
                     value: item.value
                 })),
                 {

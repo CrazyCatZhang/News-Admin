@@ -35,12 +35,12 @@ function SideMenu(props) {
     function checkPagePermissions(items) {
         return items.filter(item => item.pagepermisson === 1 && rights.includes(item.key)).map(item => {
             item.children = item.children.filter(arr => arr.pagepermisson === 1 && rights.includes(arr.key)).map(arr => {
-                return {key: arr.key, label: arr.label}
+                return {key: arr.key, label: arr.title}
             })
             if (item.children.length > 0) {
-                return {key: item.key, label: item.label, children: item.children, icon: iconList[item.key]}
+                return {key: item.key, label: item.title, children: item.children, icon: iconList[item.key]}
             }
-            return {key: item.key, label: item.label, icon: iconList[item.key]}
+            return {key: item.key, label: item.title, icon: iconList[item.key]}
         })
     }
 

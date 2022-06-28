@@ -109,7 +109,7 @@ function NewsAdd(props) {
                     </Form.Item>
                     <Form.Item
                         label="新闻分类"
-                        name="category"
+                        name="categoryId"
                         rules={[
                             {
                                 required: true,
@@ -126,7 +126,7 @@ function NewsAdd(props) {
                             filterOption={(input, option) => option.children.toLowerCase().includes(input.toLowerCase())}
                         >
                             {
-                                category.map(item => <Option key={item.id} value={item.id}>{item.label}</Option>)
+                                category.map(item => <Option key={item.id} value={item.id}>{item.title}</Option>)
                             }
                         </Select>
                     </Form.Item>
@@ -138,7 +138,6 @@ function NewsAdd(props) {
         {
             title: '新闻内容',
             content: <NewsEditor getContent={(value) => {
-                console.log(value)
                 setContent(value)
             }}/>,
             description: '新闻主题内容'
