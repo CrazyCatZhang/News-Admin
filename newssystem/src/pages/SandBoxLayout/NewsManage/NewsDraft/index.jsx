@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import axios from "axios";
-import {Button, Table, Modal} from "antd";
+import {Button, Table, Modal, notification} from "antd";
 import {DeleteOutlined, EditOutlined, ExclamationCircleOutlined, UploadOutlined} from "@ant-design/icons";
 import {useAuth} from "../../../../guard/AuthProvider";
 import {Link, useNavigate} from "react-router-dom";
@@ -52,13 +52,29 @@ function NewsDraft(props) {
                 return <div>
                     <Button danger shape="circle" icon={<DeleteOutlined/>} onClick={() => confirmMethod(item)}/>
 
-                    <Button shape="circle" icon={<EditOutlined/>} onClick={() => navigate(`/news-manage/update/${item.id}`)}/>
+                    <Button shape="circle" icon={<EditOutlined/>}
+                            onClick={() => navigate(`/news-manage/update/${item.id}`)}/>
 
-                    <Button type="primary" shape="circle" icon={<UploadOutlined/>}/>
+                    <Button type="primary" shape="circle" icon={<UploadOutlined/>}
+                            onClick={() => handleCheck(item.id)}/>
                 </div>
             }
         }
     ];
+
+    const handleCheck = (id) => {
+        axios.patch(`/news/${id}`, {
+            "auditState": 1
+        }).then(res => {
+            navigate('/audit-manage/list')
+            notification.info({
+                message: `通知`,
+                description:
+                    `您可以到审核列表中查看您的新闻`,
+                placement: 'bottomRight',
+            });
+        })
+    }
 
 
     const confirmMethod = (item) => {
