@@ -4,6 +4,8 @@ import '@wangeditor/editor/dist/css/style.css' // 引入 css
 
 function NewsEditor(props) {
 
+    const {content} = props
+
     const [editor, setEditor] = useState(null) // 存储 editor 实例
     const [html, setHtml] = useState('') // 编辑器内容
 
@@ -13,12 +15,13 @@ function NewsEditor(props) {
     }
 
     useEffect(() => {
+        setHtml(content)
         return () => {
             if (editor == null) return
             editor.destroy()
             setEditor(null)
         }
-    }, [editor])
+    }, [content, editor])
 
     return (
         <div style={{border: '1px solid #ccc', zIndex: 100}} onBlur={() => {

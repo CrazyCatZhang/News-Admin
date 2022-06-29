@@ -3,7 +3,7 @@ import axios from "axios";
 import {Button, Table, Modal} from "antd";
 import {DeleteOutlined, EditOutlined, ExclamationCircleOutlined, UploadOutlined} from "@ant-design/icons";
 import {useAuth} from "../../../../guard/AuthProvider";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 
 const {confirm} = Modal
 
@@ -11,6 +11,7 @@ function NewsDraft(props) {
     const [dataSource, setDataSource] = useState([])
 
     const {user: {username}} = useAuth()
+    const navigate = useNavigate()
 
     useEffect(() => {
         axios.get(`/news?author=${username}&auditState=0&_expand=category`).then(res => {
@@ -51,7 +52,7 @@ function NewsDraft(props) {
                 return <div>
                     <Button danger shape="circle" icon={<DeleteOutlined/>} onClick={() => confirmMethod(item)}/>
 
-                    <Button shape="circle" icon={<EditOutlined/>}/>
+                    <Button shape="circle" icon={<EditOutlined/>} onClick={() => navigate(`/news-manage/update/${item.id}`)}/>
 
                     <Button type="primary" shape="circle" icon={<UploadOutlined/>}/>
                 </div>

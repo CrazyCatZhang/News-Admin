@@ -16,6 +16,7 @@ import {useAuth} from "../../guard/AuthProvider";
 import {Navigate, Route, Routes} from "react-router-dom";
 import NoPermission from "../../pages/SandBoxLayout/NoPermission";
 import NewsPreview from "../../pages/SandBoxLayout/NewsManage/NewsPreview";
+import NewsUpdate from "../../pages/SandBoxLayout/NewsManage/NewsUpdate";
 
 const LocalRouterMap = {
     "/home": <Home/>,
@@ -26,6 +27,7 @@ const LocalRouterMap = {
     "/news-manage/draft": <NewsDraft/>,
     "/news-manage/category": <NewsCategory/>,
     "/news-manage/preview/:id": <NewsPreview/>,
+    "/news-manage/update/:id": <NewsUpdate/>,
     "/audit-manage/audit": <Audit/>,
     "/audit-manage/list": <AuditList/>,
     "/publish-manage/unpublished": <Unpublished/>,

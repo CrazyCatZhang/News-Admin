@@ -6,12 +6,12 @@ import './index.css'
 
 import NewsEditor from "../../../../components/NewsEditor";
 import {useAuth} from "../../../../guard/AuthProvider";
-import {useNavigate} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 
 const {Step} = Steps;
 const {Option} = Select;
 
-function NewsAdd(props) {
+function NewsUpdate(props) {
 
     const [current, setCurrent] = useState(0);
     const [category, setCategory] = useState([])
@@ -19,14 +19,25 @@ function NewsAdd(props) {
     const [content, setContent] = useState("")
 
     const NewsRef = useRef()
-    const {user} = useAuth()
     const navigate = useNavigate()
+    const {id} = useParams()
 
     useEffect(() => {
         axios.get('/categories').then(res => {
             setCategory(res.data)
         })
     }, [])
+
+    useEffect(() => {
+        axios.get(`/news/${id}?_expand=category&_expand=role`).then(res => {
+            let {title, categoryId, content} = res.data
+            NewsRef.current.setFieldsValue({
+                title,
+                categoryId
+            })
+            setContent(content)
+        })
+    }, [id])
 
     const next = () => {
         if (current === 0) {
@@ -60,17 +71,10 @@ function NewsAdd(props) {
     }
 
     const handleSave = (auditState) => {
-        axios.post('/news', {
+        axios.patch(`/news/${id}`, {
             ...formInfo,
             "content": content,
-            "region": user.region ? user.region : "全球",
-            "author": user.username,
-            "roleId": user.roleId,
             "auditState": auditState,
-            "publishState": 0,
-            "createTime": Date.now(),
-            "star": 0,
-            "view": 0,
         }).then(res => {
             navigate(auditState === 0 ? '/news-manage/draft' : '/audit-manage/list')
             openNotification('bottomRight', auditState)
@@ -139,7 +143,7 @@ function NewsAdd(props) {
             title: '新闻内容',
             content: <NewsEditor getContent={(value) => {
                 setContent(value)
-            }}/>,
+            }} content={content}/>,
             description: '新闻主题内容'
         },
         {
@@ -153,9 +157,8 @@ function NewsAdd(props) {
         <>
             <PageHeader
                 className="site-page-header"
-                // onBack={() => null}
-                title="撰写新闻"
-                subTitle="This is a subtitle"
+                onBack={() => navigate(-1)}
+                title="更新新闻"
             />
             <Steps current={current} onChange={current => {
             }}>
@@ -196,4 +199,4 @@ function NewsAdd(props) {
     );
 }
 
-export default NewsAdd;
+export default NewsUpdate;
