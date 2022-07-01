@@ -1,23 +1,16 @@
-import React, {useEffect, useState} from 'react';
-import axios from "axios";
-import {useAuth} from "../../../../guard/AuthProvider";
+import React from 'react';
 import NewsPublish from "../../../../components/NewsPublish";
+import usePublish from "../../../../components/usePublish";
+import {Button} from "antd";
 
 function Unpublished(props) {
 
-    const {user: {username}} = useAuth()
-
-    const [dataSource,setDataSource] = useState([])
-
-    useEffect(() => {
-        axios.get(`/news?author=${username}&publishState=1&_expand=category`).then(res => {
-            setDataSource(res.data)
-        })
-    }, [username])
+    const {dataSource, handlePublish} = usePublish(1)
 
     return (
         <div>
-            <NewsPublish dataSource={dataSource}/>
+            <NewsPublish dataSource={dataSource}
+                         button={(id) => <Button type="primary" onClick={() => handlePublish(id)}>发布</Button>}/>
         </div>
     );
 }

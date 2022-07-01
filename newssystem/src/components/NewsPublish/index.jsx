@@ -8,7 +8,7 @@ function NewsPublish(props) {
             title: '新闻标题',
             dataIndex: 'title',
             render: (title, item) => {
-                return <Link to={`#/news-manage/preview/${item.id}`}>{title}</Link>
+                return <Link to={`/news-manage/preview/${item.id}`}>{title}</Link>
             }
         },
         {
@@ -26,7 +26,7 @@ function NewsPublish(props) {
             title: "操作",
             render: (item) => {
                 return <div>
-                    <Button>发布</Button>
+                    {props.button(item.id)}
                 </div>
             }
         }

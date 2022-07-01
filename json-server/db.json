@@ -524,7 +524,7 @@
       "author": "admin",
       "roleId": 1,
       "auditState": 2,
-      "publishState": 2,
+      "publishState": 3,
       "createTime": 1615778808893,
       "star": 300,
       "view": 454,
@@ -677,20 +677,6 @@
       "view": 2,
       "id": 18,
       "publishTime": 1618039853615
-    },
-    {
-      "title": "testAdmin111111111",
-      "categoryId": 1,
-      "content": "<p>bfsaagavafagaewg</p><ul><li>111111</li><li>222222</li><li>333333</li></ul>",
-      "region": "全球",
-      "author": "admin",
-      "roleId": 1,
-      "auditState": 2,
-      "publishState": 1,
-      "createTime": 1656410060081,
-      "star": 0,
-      "view": 0,
-      "id": 19
     }
   ]
 }
