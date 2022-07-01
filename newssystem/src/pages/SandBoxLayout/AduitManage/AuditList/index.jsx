@@ -80,7 +80,8 @@ function AuditList(props) {
 
     const handlePublish = (item) => {
         axios.patch(`/news/${item.id}`, {
-            "publishState": 2
+            "publishState": 2,
+            "publishTime": Date.now()
         }).then(res => {
             navigate(`/publish-manage/published`)
             notification.info({
