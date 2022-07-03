@@ -3,8 +3,11 @@ import {Header} from "antd/es/layout/layout";
 import {MenuFoldOutlined, MenuUnfoldOutlined} from "@ant-design/icons";
 import {Avatar, Dropdown, Menu} from "antd";
 import {useAuth} from "../../guard/AuthProvider";
+import {connect} from "react-redux";
 
 function TopHeader(props) {
+
+    console.log(props.isCollapsed)
 
     const {user: {role: {roleName}, username}, logout} = useAuth()
 
@@ -55,4 +58,6 @@ function TopHeader(props) {
     );
 }
 
-export default TopHeader;
+export default connect(
+    ({CollapsedReducer: {isCollapsed}}) => ({isCollapsed})
+)(TopHeader);
