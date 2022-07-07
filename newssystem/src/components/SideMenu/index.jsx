@@ -8,9 +8,11 @@ import './index.css'
 import {useLocation, useNavigate} from "react-router-dom";
 import axios from "axios";
 import {useAuth} from "../../guard/AuthProvider";
+import {connect} from "react-redux";
 
 function SideMenu(props) {
 
+    const {isCollapsed} = props
     const rootSubmenuKeys = ['/user-manage', '/right-manage', '/news-manage', '/audit-manage', '/publish-manage']
     const defaultSelectedKeys = [useLocation().pathname]
     const defaultOpenKeys = ["/" + useLocation().pathname.split('/')[1]]
@@ -60,7 +62,7 @@ function SideMenu(props) {
     }, [])
 
     return (
-        <Sider trigger={null} collapsible collapsed={false}>
+        <Sider trigger={null} collapsible collapsed={isCollapsed}>
             <div className="logo">全球新闻发布管理系统</div>
             <Menu
                 theme="dark"
@@ -77,4 +79,6 @@ function SideMenu(props) {
     );
 }
 
-export default SideMenu;
+export default connect(
+    ({CollapsedReducer: {isCollapsed}}) => ({isCollapsed})
+)(SideMenu);

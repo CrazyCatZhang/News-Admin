@@ -7,9 +7,13 @@ import {connect} from "react-redux";
 
 function TopHeader(props) {
 
-    console.log(props.isCollapsed)
+    const {isCollapsed, changeCollapsed} = props
 
     const {user: {role: {roleName}, username}, logout} = useAuth()
+
+    const handleChangeCollapsed = () => {
+        changeCollapsed()
+    }
 
     const menu = (
         <Menu
@@ -38,9 +42,9 @@ function TopHeader(props) {
                 padding: '0 16px',
             }}
         >
-            {React.createElement(collapsed ? MenuUnfoldOutlined : MenuFoldOutlined, {
+            {React.createElement(isCollapsed ? MenuUnfoldOutlined : MenuFoldOutlined, {
                 className: 'trigger',
-                onClick: () => setCollapsed(!collapsed),
+                onClick: handleChangeCollapsed,
             })}
             <div style={{float: 'right'}}>
                 <span>
@@ -59,5 +63,12 @@ function TopHeader(props) {
 }
 
 export default connect(
-    ({CollapsedReducer: {isCollapsed}}) => ({isCollapsed})
+    ({CollapsedReducer: {isCollapsed}}) => ({isCollapsed}),
+    {
+        changeCollapsed() {
+            return {
+                type: "change_collapsed"
+            }
+        }
+    }
 )(TopHeader);
