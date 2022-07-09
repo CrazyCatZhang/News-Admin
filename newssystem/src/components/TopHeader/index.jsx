@@ -1,18 +1,20 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {Header} from "antd/es/layout/layout";
 import {MenuFoldOutlined, MenuUnfoldOutlined} from "@ant-design/icons";
 import {Avatar, Dropdown, Menu} from "antd";
 import {useAuth} from "../../guard/AuthProvider";
-import {connect} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
+import {changeCollapsed} from "../../redux/reducers/CollapsedReducer";
 
 function TopHeader(props) {
 
-    const {isCollapsed, changeCollapsed} = props
+    const dispatch = useDispatch()
+    const {isCollapsed} = useSelector(state => state.collapsed)
 
     const {user: {role: {roleName}, username}, logout} = useAuth()
 
     const handleChangeCollapsed = () => {
-        changeCollapsed()
+        dispatch(changeCollapsed())
     }
 
     const menu = (
@@ -33,7 +35,6 @@ function TopHeader(props) {
             ]}
         />
     );
-    const [collapsed, setCollapsed] = useState(false)
 
     return (
         <Header
@@ -62,13 +63,4 @@ function TopHeader(props) {
     );
 }
 
-export default connect(
-    ({CollapsedReducer: {isCollapsed}}) => ({isCollapsed}),
-    {
-        changeCollapsed() {
-            return {
-                type: "change_collapsed"
-            }
-        }
-    }
-)(TopHeader);
+export default TopHeader

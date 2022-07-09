@@ -1,12 +1,17 @@
-export const CollapsedReducer = (prevState = {isCollapsed: false}, action) => {
-    let {type} = action
+import {createSlice} from "@reduxjs/toolkit";
 
-    switch (type) {
-        case "change_collapsed":
-            let newState = {...prevState}
-            newState.isCollapsed = !newState.isCollapsed
-            return newState
-        default:
-            return prevState
+export const collapsedSlice = createSlice({
+    name: 'collapsed',
+    initialState: {
+        isCollapsed: false
+    },
+    reducers: {
+        changeCollapsed(state) {
+            state.isCollapsed = !state.isCollapsed
+        }
     }
-}
+})
+
+export const {changeCollapsed} = collapsedSlice.actions
+
+export default collapsedSlice.reducer

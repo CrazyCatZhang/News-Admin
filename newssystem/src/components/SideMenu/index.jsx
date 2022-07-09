@@ -8,11 +8,11 @@ import './index.css'
 import {useLocation, useNavigate} from "react-router-dom";
 import axios from "axios";
 import {useAuth} from "../../guard/AuthProvider";
-import {connect} from "react-redux";
+import {connect, useSelector} from "react-redux";
 
 function SideMenu(props) {
 
-    const {isCollapsed} = props
+    const {isCollapsed} = useSelector(state => state.collapsed)
     const rootSubmenuKeys = ['/user-manage', '/right-manage', '/news-manage', '/audit-manage', '/publish-manage']
     const defaultSelectedKeys = [useLocation().pathname]
     const defaultOpenKeys = ["/" + useLocation().pathname.split('/')[1]]
@@ -79,6 +79,4 @@ function SideMenu(props) {
     );
 }
 
-export default connect(
-    ({CollapsedReducer: {isCollapsed}}) => ({isCollapsed})
-)(SideMenu);
+export default SideMenu

@@ -1,10 +1,8 @@
-import {combineReducers, legacy_createStore as createStore} from "redux";
-import {CollapsedReducer} from "./reducers/CollapsedReducer";
+import {configureStore} from "@reduxjs/toolkit";
+import CollapsedReducer from "./reducers/CollapsedReducer";
 
-const reducer = combineReducers({
-    CollapsedReducer
+export default configureStore({
+    reducer: {
+        collapsed: CollapsedReducer
+    }
 })
-
-const store = createStore(reducer)
-
-export default store
