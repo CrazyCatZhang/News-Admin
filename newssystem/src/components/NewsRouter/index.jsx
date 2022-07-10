@@ -17,6 +17,8 @@ import {Navigate, Route, Routes} from "react-router-dom";
 import NoPermission from "../../pages/SandBoxLayout/NoPermission";
 import NewsPreview from "../../pages/SandBoxLayout/NewsManage/NewsPreview";
 import NewsUpdate from "../../pages/SandBoxLayout/NewsManage/NewsUpdate";
+import {useSelector} from "react-redux";
+import {Spin} from "antd";
 
 const LocalRouterMap = {
     "/home": <Home/>,
@@ -36,6 +38,8 @@ const LocalRouterMap = {
 }
 
 function NewsRouter(props) {
+
+    const {isLoading} = useSelector(state => state.loading)
 
     const [BackRouteList, setBackRouteList] = useState([])
     useEffect(() => {
@@ -58,19 +62,21 @@ function NewsRouter(props) {
     }
 
     return (
-        <Routes>
-            {
-                BackRouteList.map(item => {
-                        if (checkRoute(item) && checkUserPermission(item)) {
-                            return <Route path={item.key} key={item.key} element={LocalRouterMap[item.key]}/>
+        <Spin size="large" spinning={isLoading}>
+            <Routes>
+                {
+                    BackRouteList.map(item => {
+                            if (checkRoute(item) && checkUserPermission(item)) {
+                                return <Route path={item.key} key={item.key} element={LocalRouterMap[item.key]}/>
+                            }
+                            return null
                         }
-                        return null
-                    }
-                )
-            }
-            <Route path="/" element={<Navigate to='/home'/>}/>
-            <Route path="*" element={<NoPermission/>}/>
-        </Routes>
+                    )
+                }
+                <Route path="/" element={<Navigate to='/home'/>}/>
+                <Route path="*" element={<NoPermission/>}/>
+            </Routes>
+        </Spin>
     );
 }
 
