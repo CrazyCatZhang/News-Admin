@@ -1,17 +1,27 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {Avatar, Card, Col, List, Row} from "antd";
 import {EditOutlined, EllipsisOutlined, SettingOutlined} from "@ant-design/icons";
 import Meta from "antd/es/card/Meta";
+import axios from "axios";
+import {Link} from "react-router-dom";
+import {useAuth} from "../../../guard/AuthProvider";
 
 function Home(props) {
 
-    const data = [
-        'Racing car sprays burning fuel into crowd.',
-        'Japanese princess to wed commoner.',
-        'Australian walks 100km after outback crash.',
-        'Man charged over missing wedding girl.',
-        'Los Angeles battles huge wildfires.',
-    ];
+    const [viewList, setViewList] = useState([])
+    const [starList, setStarList] = useState([])
+    const {user: {username, region, role: {roleName}}} = useAuth()
+
+    useEffect(() => {
+        axios.get('/news?publishState=2&_expand=category&_sort=view&_order=desc&_limit=6').then((res) => {
+            // console.log(res.data)
+            setViewList(res.data)
+        })
+        axios.get('/news?publishState=2&_expand=category&_sort=star&_order=desc&_limit=6').then((res) => {
+            // console.log(res.data)
+            setStarList(res.data)
+        })
+    }, [])
 
     return (
         <div className="site-card-wrapper">
@@ -20,8 +30,10 @@ function Home(props) {
                     <Card title="用户最常浏览" bordered={true}>
                         <List
                             size="small"
-                            dataSource={data}
-                            renderItem={(item) => <List.Item>{item}</List.Item>}
+                            dataSource={viewList}
+                            renderItem={(item) => <List.Item>
+                                <Link to={`/news-manage/preview/${item.id}`}>{item.title}</Link>
+                            </List.Item>}
                         />
                     </Card>
                 </Col>
@@ -29,8 +41,10 @@ function Home(props) {
                     <Card title="用户点赞最多" bordered={true}>
                         <List
                             size="small"
-                            dataSource={data}
-                            renderItem={(item) => <List.Item>{item}</List.Item>}
+                            dataSource={starList}
+                            renderItem={(item) => <List.Item>
+                                <Link to={`/news-manage/preview/${item.id}`}>{item.title}</Link>
+                            </List.Item>}
                         />
                     </Card>
                 </Col>
@@ -50,8 +64,15 @@ function Home(props) {
                     >
                         <Meta
                             avatar={<Avatar src="https://joeschmoe.io/api/v1/random"/>}
-                            title="Card title"
-                            description="This is the description"
+                            title={username}
+                            description={
+                                <div>
+                                    <b>{region === '' ? '全球' : region}</b>
+                                    <span style={{
+                                        paddingLeft: '20px'
+                                    }}>{roleName}</span>
+                                </div>
+                            }
                         />
                     </Card>
                 </Col>
