@@ -1,7 +1,7 @@
 import axios from "axios";
 import NProgress from "accessible-nprogress";
 import {changeLoading} from "../redux/reducers/LoadingReducer";
-import store from "../redux/store";
+import {store} from "../redux/store";
 
 
 let requests = 0;
