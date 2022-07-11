@@ -26,6 +26,10 @@ function Home(props) {
         axios.get('/news?publishState=2&_expand=category').then(res => {
             renderBarView(_.groupBy(res.data, item => item.category.title))
         })
+
+        return () => {
+            window.resize = null
+        }
     }, [])
 
     const renderBarView = (obj) => {
@@ -39,7 +43,9 @@ function Home(props) {
             xAxis: {
                 data: Object.keys(obj)
             },
-            yAxis: {},
+            yAxis: {
+                minInterval: 1
+            },
             series: [
                 {
                     name: '数量',
@@ -48,6 +54,9 @@ function Home(props) {
                 }
             ]
         });
+        window.onresize = () => {
+            myChart.resize()
+        }
     }
 
     return (
