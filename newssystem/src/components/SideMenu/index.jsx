@@ -13,7 +13,7 @@ import {connect, useSelector} from "react-redux";
 function SideMenu(props) {
 
     const {isCollapsed} = useSelector(state => state.collapsed)
-    const rootSubmenuKeys = ['/user-manage', '/right-manage', '/news-manage', '/audit-manage', '/publish-manage']
+    const rootSubmenuKeys = ['/user-manage', '/right-manage', '/News-manage', '/audit-manage', '/publish-manage']
     const defaultSelectedKeys = [useLocation().pathname]
     const defaultOpenKeys = ["/" + useLocation().pathname.split('/')[1]]
     const {user: {role: {rights}}} = useAuth()

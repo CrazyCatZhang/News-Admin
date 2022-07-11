@@ -9,6 +9,8 @@ import {PersistGate} from 'redux-persist/integration/react'
 
 import './App.css'
 import './utils/http'
+import News from "./pages/News/News";
+import Detail from "./pages/News/Detail";
 
 function App(props) {
     return (
@@ -16,6 +18,8 @@ function App(props) {
             <PersistGate loading={null} persistor={persistor}>
                 <Routes>
                     <Route path="/login" element={<Login/>}/>
+                    <Route path="/news" element={<News/>}/>
+                    <Route path="/detail/:id" element={<Detail/>}/>
                     <Route path="/*" element={<NewsSendBoxLayout/>}/>
                 </Routes>
             </PersistGate>
