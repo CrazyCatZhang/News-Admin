@@ -1,5 +1,5 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {Avatar, Card, Col, List, Row} from "antd";
+import {Avatar, Card, Col, Drawer, List, Row} from "antd";
 import {EditOutlined, EllipsisOutlined, SettingOutlined} from "@ant-design/icons";
 import Meta from "antd/es/card/Meta";
 import axios from "axios";
@@ -12,8 +12,12 @@ function Home(props) {
 
     const [viewList, setViewList] = useState([])
     const [starList, setStarList] = useState([])
+    const [visible, setVisible] = useState(false)
+    const [personList, setPersonList] = useState([])
     const {user: {username, region, role: {roleName}}} = useAuth()
     const barRef = useRef()
+    const pieRef = useRef()
+    let myChart
 
     useEffect(() => {
         axios.get('/news?publishState=2&_expand=category&_sort=view&_order=desc&_limit=6').then((res) => {
@@ -24,6 +28,7 @@ function Home(props) {
         })
 
         axios.get('/news?publishState=2&_expand=category').then(res => {
+            setPersonList(res.data.filter(item => item.author === username))
             renderBarView(_.groupBy(res.data, item => item.category.title))
         })
 
@@ -57,6 +62,62 @@ function Home(props) {
         window.onresize = () => {
             myChart.resize()
         }
+    }
+
+    const renderPieView = (obj) => {
+        const currentList = _.groupBy(obj, item => item.category.title)
+        let list = []
+        for (const currentListKey in currentList) {
+            list.push({
+                name: currentListKey,
+                value: currentList[currentListKey].length
+            })
+        }
+        if (myChart !== null && myChart !== "" && myChart !== undefined) {
+            myChart.dispose();
+        }
+        myChart = echarts.init(pieRef.current);
+        let option;
+
+        option = {
+            title: {
+                text: `${username}用户新闻分类图示`,
+                left: 'center'
+            },
+            tooltip: {
+                trigger: 'item',
+                formatter: '{a} <br/>{b} : {c} ({d}%)'
+            },
+            legend: {
+                left: 'center',
+                top: 'bottom',
+                data: Object.keys(currentList)
+            },
+            toolbox: {
+                show: true,
+                feature: {
+                    mark: {show: true},
+                    dataView: {show: true, readOnly: false},
+                    restore: {show: true},
+                    saveAsImage: {show: true}
+                }
+            },
+            series: [
+                {
+                    name: '发布数量',
+                    type: 'pie',
+                    radius: [20, 140],
+                    center: ['50%', '50%'],
+                    roseType: 'area',
+                    itemStyle: {
+                        borderRadius: 5
+                    },
+                    data: list
+                }
+            ]
+        };
+
+        option && myChart.setOption(option);
     }
 
     return (
@@ -93,7 +154,10 @@ function Home(props) {
                             />
                         }
                         actions={[
-                            <SettingOutlined key="setting"/>,
+                            <SettingOutlined key="setting" onClick={async () => {
+                                await setVisible(true)
+                                renderPieView(personList)
+                            }}/>,
                             <EditOutlined key="edit"/>,
                             <EllipsisOutlined key="ellipsis"/>,
                         ]}
@@ -113,6 +177,15 @@ function Home(props) {
                     </Card>
                 </Col>
             </Row>
+            <Drawer width='600px' title="个人新闻分类" placement="right" onClose={() => {
+                setVisible(false)
+            }} visible={visible}>
+                <div ref={pieRef} style={{
+                    width: '550px',
+                    height: '400px',
+                    marginTop: '30px'
+                }}></div>
+            </Drawer>
             <div ref={barRef} style={{
                 height: '400px',
                 marginTop: '30px'

@@ -11,7 +11,6 @@ import './App.css'
 import './utils/http'
 
 function App(props) {
-    console.log(store)
     return (
         <Provider store={store}>
             <PersistGate loading={null} persistor={persistor}>
