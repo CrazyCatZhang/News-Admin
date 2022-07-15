@@ -230,5 +230,21 @@ React-based news release management system:newspaper:
 
 ###### The sidebar showcases user-operable features: Use the `Sider` component to control the sidebar and sidebar shrinkage, and use the `Menu` component to render the sidebar content
 
-###### Dynamic Sidebar:
+###### Dynamic Sidebar:Read the sidebar page permissions from the backend, then process the data and pass it to the `Menu` component as items
+
+###### `checkPagePermissions`: Verify that sidebar permissions are rendered to the interface
+
+```react
+function checkPagePermissions(items) {
+    return items.filter(item => item.pagepermisson === 1 && rights.includes(item.key)).map(item => {
+        item.children = item.children.filter(arr => arr.pagepermisson === 1 && rights.includes(arr.key)).map(arr => {
+            return {key: arr.key, label: arr.title}
+        })
+        if (item.children.length > 0) {
+            return {key: item.key, label: item.title, children: item.children, icon: iconList[item.key]}
+        }
+        return {key: item.key, label: item.title, icon: iconList[item.key]}
+    })
+}
+```
 
