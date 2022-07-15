@@ -271,3 +271,29 @@ const switchMethod = (item) => {
 
 ### RoleList
 
+###### Use the Table component to display the list of roles, and use the Tree structure to display the list of roles' permissions
+
+###### Edit role permissions：
+
+- ###### `onCheck`: Permission switch function,set the current permission list
+
+- ###### `handleOK`: Edit the successful processing function, set the modal box to hide, modify the DataSource, and modify the corresponding permission list data in the background 
+
+### UserList
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
