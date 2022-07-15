@@ -185,3 +185,50 @@ React-based news release management system:newspaper:
 
 ### TopHeader
 
+###### Set the page header information, use the `Header` component, render a button on the left to control whether the sidebar shrinks, and use the `Dropdown` component on the right to display basic user information
+
+###### Redux State Management:
+
+- ###### Create CollapsedSlice
+
+  ```react
+  export const collapsedSlice = createSlice({
+      name: 'collapsed',
+      initialState: {
+          isCollapsed: false
+      },
+      reducers: {
+          changeCollapsed(state) {
+              state.isCollapsed = !state.isCollapsed
+          }
+      }
+  })
+  
+  export const {changeCollapsed} = collapsedSlice.actions
+  
+  export default collapsedSlice.reducer
+  ```
+
+- ###### Create Store
+
+  ```react
+  export default configureStore({
+    reducer: {
+      collapsed: CollapsedReducer
+    }
+  })
+  ```
+
+- ###### Operating State:useDispatch() returns a function that dispatches state, useSelector() returns the state managed in Redux
+
+  ```react
+  const dispatch = useDispatch()
+  const {isCollapsed} = useSelector(state => state.collapsed)
+  ```
+
+### SideMenu
+
+###### The sidebar showcases user-operable features: Use the `Sider` component to control the sidebar and sidebar shrinkage, and use the `Menu` component to render the sidebar content
+
+###### Dynamic Sidebar:
+
