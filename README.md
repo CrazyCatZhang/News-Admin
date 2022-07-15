@@ -248,3 +248,26 @@ function checkPagePermissions(items) {
 }
 ```
 
+### RightList
+
+###### The Table component displays the list of permissions and implements the functions of permission switch and permission deletion
+
+###### `switchMethod`: Permission switch, axios sends a patch request to the background, inverting the value of pagepermission
+
+```react
+const switchMethod = (item) => {
+  item.pagepermisson = item.pagepermisson === 1 ? 0 : 1
+  if (item.grade === 1) {
+    axios.patch(`/rights/${item.id}`, {
+      pagepermisson: item.pagepermisson
+    })
+  } else {
+    axios.patch(`/children/${item.id}`, {
+      pagepermisson: item.pagepermisson
+    })
+  }
+}
+```
+
+### RoleList
+
