@@ -281,6 +281,123 @@ const switchMethod = (item) => {
 
 ### UserList
 
+###### Realize user list display, add user, delete user and modify user functions.Extract the form component as a subcomponent of the modal box for adding users and updating users.Use forwardRef reference to pass, so that the parent component can get the information of the child component form
+
+###### Add user:
+
+```react
+<UserForm regionList={regionList} roleList={roleList} ref={addForm}/>
+```
+
+###### Update user:
+
+```react
+<UserForm regionList={regionList} roleList={roleList} ref={updateForm}
+                          isUpdateDisabled={isUpdateDisabled} isUpdate={true}/>
+```
+
+###### isUpdateDisabled: Controls whether the form area information can be selected, the super administrator cannot select the region
+
+###### isUpdate: Is it an update status
+
+```react
+//Change whether the area box is optional
+const changeRegionDisabled = (value) => {
+    if (isUpdate) {
+        return roleId !== 1;
+    } else {
+        if (roleId === 1) {
+            return false
+        } else {
+            return value !== region
+        }
+    }
+}
+```
+
+```react
+//Change whether the role box is optional
+const changeRoleDisabled = (item) => {
+    if (isUpdate) {
+        return roleId !== 1;
+    } else {
+        if (roleId === 1) {
+            return false
+        } else {
+            return item.id !== 3
+        }
+    }
+}
+```
+
+### Login
+
+###### Use the Form component to realize the user's login box, and use tsparticles to realize the particle effect of the interface
+
+### NewsManage
+
+#### NewsAdd
+
+###### The Steps component implements the step bar function, and wangEditor implements a rich text editor for writing news content. After the step bar is completed, it implements the function of submitting drafts and submitting for review.
+
+###### Step bar next function:
+
+```react
+const next = () => {
+    if (current === 0) {
+        NewsRef.current.validateFields().then(res => {
+            setFormInfo(res)
+            setCurrent(current + 1);
+        }).catch(err => {
+            console.log(err)
+        })
+    } else {
+        const pattern = /<p>(&nbsp;)*<\/p>/
+        if (content === '' || pattern.test(content) || content === '<p><br></p>') {
+            message.error('新闻内容不能为空')
+        } else {
+            setCurrent(current + 1);
+        }
+    }
+}
+```
+
+#### NewsCategory
+
+###### The Table component displays news categories, EditableRow implements editable rows, and EditableCell implements editable columns
+
+```react
+//Add this property to Table to enable editable cells
+components={{
+    body: {
+        row: EditableRow,
+            cell: EditableCell,
+    },
+```
+
+#### NewsDraft
+
+###### The Table component displays the news content edited by the current user, and realizes the functions of viewing news and deleting news
+
+#### NewsPreview
+
+###### Display of news content, including creator, creation time, release time, region, review status, release status, number of visits, number of comments and number of likes
+
+```react
+//audit status array
+const auditList = ["未审核", '审核中', '已通过', '未通过']
+//publish status array
+const publishList = ["未发布", '待发布', '已上线', '已下线']
+```
+
+#### NewsUpdate
+
+###### Route incoming dynamic id, display the corresponding interface, similar to the writing news interface, data and content are automatically filled, and the news content can be changed. After the update is completed, the notification widget is used to realize the notification function
+
+### AuditManage
+
+#### Aduit
+
 
 
 
