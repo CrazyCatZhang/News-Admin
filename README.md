@@ -398,13 +398,81 @@ const publishList = ["未发布", '待发布', '已上线', '已下线']
 
 #### Aduit
 
+###### Review the news, realize the function of passing and rejecting, and change the status of the news to the review
 
+###### Main function realization:
 
+```react
+const handleAudit = (item, auditState, publishState) => {
+    setDataSource(dataSource.filter(data => data.id !== item.id))
+    axios.patch(`/news/${item.id}`, {
+        auditState,
+        publishState
+    }).then(res => {
+        notification.info({
+            message: `通知`,
+            description:
+                `您可以到【审核管理/审核列表】中查看您的新闻审核状态`,
+            placement: 'bottomRight',
+        });
+    })
+}
+```
 
+#### AuditList
 
+###### News review list, you can revoke the news in the review, publish the news that has passed, and update the news that has not passed, and then submit it for review
 
+###### Undo function:
 
+```react
+const handleRevert = (item) => {
+    setDataSource(dataSource.filter(data => data.id !== item.id))
+    axios.patch(`/news/${item.id}`, {
+        "auditState": 0
+    }).then(res => {
+        notification.info({
+            message: `通知`,
+            description:
+                `您可以到草稿箱中查看您的新闻`,
+            placement: 'bottomRight',
+        });
+    })
+}
+```
 
+###### Publish function:
+
+```react
+const handlePublish = (item) => {
+    axios.patch(`/news/${item.id}`, {
+        "publishState": 2,
+        "publishTime": Date.now()
+    }).then(res => {
+        navigate(`/publish-manage/published`)
+        notification.info({
+            message: `通知`,
+            description:
+                `您可以到【发布管理/已发布】中查看您的新闻`,
+            placement: 'bottomRight',
+        });
+    })
+}
+```
+
+### PublishManage
+
+#### Published
+
+###### Published interface to realize offline operation of news
+
+#### SuSet
+
+###### The interface has been offline to realize the deletion of news
+
+#### Unpublished
+
+###### To-be-published interface, to realize news publishing operation
 
 
 
